@@ -12,28 +12,28 @@ router.get('/', (req, res) => {
 
 router.get('/messages', (req, res) => {
     res.json([
-        {"time": "05:43 pm", "text": "hello"},
-        {"time": "05:44 pm", "text": "hi"},
-        {"time": "05:50 pm", "text": "glad to see you here"},
-        {"time": "06:30 pm", "text": "yeah!"}
+        {"id": "1", "time": "05:43 pm", "text": "hello"},
+        {"id": "2", "time": "05:44 pm", "text": "hi"},
+        {"id": "3", "time": "05:50 pm", "text": "glad to see you here"},
+        {"id": "4", "time": "06:30 pm", "text": "yeah!"},
     ]);
 });
 
 app.use(express.static('dist'));
 app.use('/api', router);
 
-io.on('connection', function(client) {
+io.on('connection', (client) => {
     // Notify all users except sender that new user has connected
     client.broadcast.emit('user connected', client.id);
 
     // When user sends message
-    client.on('chat message', function(message) {
+    client.on('chat message', (message) => {
         // Notify all users about new incoming message
         io.emit('chat message', {message: message, clientId: client.id});
     });
 
     // When someone has disconnected
-    client.on('disconnect', function() {
+    client.on('disconnect', () => {
         // Notify all users except sender that user has disconnected
         client.broadcast.emit('user disconnected', client.id);
     });

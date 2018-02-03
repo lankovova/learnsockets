@@ -23,8 +23,11 @@ export default class App extends React.Component {
             if (clientId === socket.id) {
                 // Set sent flag on message
                 this.setState(prevState => {
-                    // FIXME: Fix previously sent message identification
-                    prevState.messages[prevState.messages.length - 1].sent = true;
+                    // Set sent flag to message
+                    // when it comes this way
+                    // client -> server -> client
+                    prevState.messages[message.userUniqeId].sent = true;
+
                     return {messages: prevState.messages};
                 })
             } else {
@@ -48,13 +51,22 @@ export default class App extends React.Component {
         // Do nothing if messages is not loaded from the server
         if (!this.state.loaded) return;
 
+        // Uniq message id for specific user
+        message.userUniqeId = this.state.messages.length;
+
+        // Sent clear message
+        socket.emit('chat message', message);
+
+        // In self state store message with additional variables
+        // like sent flag
         this.setState(prevState => {
+            // Add additional vars to message
             message.sent = false;
+
+            // Add message to state
             prevState.messages.push(message);
             return {messages: prevState.messages};
         });
-
-        socket.emit('chat message', message);
     }
 
     render() {
@@ -63,8 +75,8 @@ export default class App extends React.Component {
                 <div className="chat">
                     {
                         (this.state.loaded)
-                        ? <MessagesList messages={this.state.messages} />
-                        : <div>Loading...</div>
+                            ? <MessagesList messages={this.state.messages} />
+                            : <div>Loading...</div>
                     }
                     <Input sendMessage={this.sendMessage} />
                 </div>

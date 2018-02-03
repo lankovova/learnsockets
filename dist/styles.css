@@ -27,11 +27,10 @@
 }
 
 .message {
+    line-height: 22px;
     width: calc(100% - 10px);
-
     display: flex;
     justify-content: space-between;
-
     margin-bottom: 5px;
 }
 

@@ -7,14 +7,13 @@ function Message({message}) {
                 <span className="time">{message.time}</span>
                 <span>{message.text}</span>
             </div>
-            <span className="check">
             {
-                // FIXME: Change +/- to pretty HTML sybols
                 (message.sent !== undefined)
-                ? (message.sent) ? '+' : '-'
-                : ''
+                    ? (message.sent)
+                        ? <span className="check">&#10003;</span>
+                        : <span className="check">&#126;</span>
+                    : <span className="check"></span>
             }
-            </span>
         </div>
     );
 }

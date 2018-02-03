@@ -1,5 +1,5 @@
 import React from 'react';
-import {getCurrentTime} from './utils';
+import { getCurrentTime } from './utils';
 
 export default class Input extends React.Component {
     constructor(props) {

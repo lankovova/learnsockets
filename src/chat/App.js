@@ -26,7 +26,8 @@ export default class App extends React.Component {
                     // Set sent flag to message
                     // when it comes this way
                     // client -> server -> client
-                    prevState.messages[message.userUniqeId].sent = true;
+                    const deliveredMessage = prevState.messages.find(msg => msg.userUniqeId === message.userUniqeId);
+                    deliveredMessage.sent = true;
 
                     return {messages: prevState.messages};
                 })

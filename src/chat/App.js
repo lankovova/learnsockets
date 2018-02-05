@@ -26,6 +26,7 @@ export default class App extends React.Component {
                     // Set sent flag to message
                     // when it comes this way
                     // client -> server -> client
+                    // FIXME:
                     const deliveredMessage = prevState.messages.find(msg => msg.userUniqeId === message.userUniqeId);
                     deliveredMessage.sent = true;
 
@@ -33,8 +34,7 @@ export default class App extends React.Component {
                 })
             } else {
                 this.setState(prevState => {
-                    prevState.messages.push(message);
-                    return {messages: prevState.messages};
+                    return {messages: [...prevState.messages, message]};
                 });
             }
         });
@@ -58,15 +58,13 @@ export default class App extends React.Component {
         // Sent clear message
         socket.emit('chat message', message);
 
-        // In self state store message with additional variables
-        // like sent flag
+        // In self state store message with additional sent flag
         this.setState(prevState => {
             // Add additional vars to message
             message.sent = false;
 
-            // Add message to state
-            prevState.messages.push(message);
-            return {messages: prevState.messages};
+            // Add new message to end of messages array
+            return {messages: [...prevState.messages, message]};
         });
     }
 
